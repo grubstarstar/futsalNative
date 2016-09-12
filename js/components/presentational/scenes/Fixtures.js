@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import {
 	Text,
@@ -11,39 +11,58 @@ import {
 	TouchableHighlight,
 	TouchableOpacity,
 	StyleSheet,
-	Modal
+	Modal,
+	RefreshControl
 } from 'react-native'
 
 import EditFixture from 'futsalNative/js/components/containers/EditFixture'
 import AddFixture from 'futsalNative/js/components/containers/AddFixture'
 import Button from 'futsalNative/js/components/presentational/micro/Button'
 
+import moment from 'moment'
+
 class Fixtures extends Component {
+
+	static propTypes = {
+		fixtures: PropTypes.arrayOf(PropTypes.shape({
+			teamA: PropTypes.string.isRequired,
+			teamB: PropTypes.string.isRequired,
+			kickOffAt: PropTypes.instanceOf(moment),
+		})),
+		isFetching: PropTypes.bool,
+		refreshFixtures: PropTypes.func,
+		saveFixture: PropTypes.func
+	};
+
+	_formatDataForList(props) {
+
+		let fixturesByDay = {}
+		props.fixtures.map((fixture) => {
+				const { teamA, teamB, kickOffAt } = fixture
+				let time = fixture.kickOffAt.format('h:mm a')
+				let day = fixture.kickOffAt.format('MMMM Do YYYY')
+				fixturesByDay[day] = fixturesByDay[day] || []
+				fixturesByDay[day].push([teamA, teamB, time])
+		})
+
+		console.log(fixturesByDay)
+
+		return fixturesByDay
+	}
 
 	constructor(props) {
 		super(props)
 		this._onListItemPress = this._onListItemPress.bind(this)
 		this._renderListItem = this._renderListItem.bind(this)
 		this._onAddFixturePress = this._onAddFixturePress.bind(this)
+		this._formatDataForList = this._formatDataForList.bind(this)
 		const ds = new ListView.DataSource({
 			rowHasChanged: (r1, r2) => r1 !== r2,
 			sectionHeaderHasChanged:  (s1, s2) => s1 !== s2
 		})
+
 		this.state = {
-			dataSource: ds.cloneWithRowsAndSections({
-				"1st Aug 2016": [
-					[ 'dd', 'two', 'three'],
-					[ 'rr', 'two', 'three'],
-					[ 'ff', 'two', 'three']
-				],
-				"8th Aug 2016": [
-					[ 'Derby County', 'Newcastle United', '12:00pm'],
-					[ 'ddd', 'two', 'three'],
-					[ 'ddd', 'two', 'three']
-				]
-			}),
-			teamAtext: 'team A',
-			teamBtext: 'team B'
+			dataSource: ds.cloneWithRowsAndSections(this._formatDataForList(this.props))
 		}
 	}
 
@@ -54,6 +73,10 @@ class Fixtures extends Component {
 				<Text>{ sectionId }</Text>
 			</View>
 		)
+	}
+
+	_onRefresh() {
+		this.props.refreshFixtures();
 	}
 
 	_onListItemPress() {
@@ -81,15 +104,25 @@ class Fixtures extends Component {
 		)
 	}
 
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			dataSource: this.state.dataSource.cloneWithRowsAndSections(this._formatDataForList(nextProps))
+		})
+	}
+
 	_render() {
-		console.log('this1', this)
 		return (
 			<View
 				style={ styles.page } >
 				<ListView
 					dataSource={ this.state.dataSource }
 					renderRow={ this._renderListItem }
-					renderSectionHeader={ this._renderSectionHeader} />
+					renderSectionHeader={ this._renderSectionHeader}
+					refreshControl={
+	          <RefreshControl
+	            refreshing={ this.props.isFetching }
+	            onRefresh={ this._onRefresh.bind(this) } /> }
+					/>
 				<Button
 					onPress={ this._onAddFixturePress }
 					text="Add Fixture" />
@@ -99,13 +132,15 @@ class Fixtures extends Component {
 
 	_renderEditDialog() {
 		return (
-			<EditFixture />
+			<EditFixture
+				onSaveFixture={ this.props.saveFixture }/>
 		)
 	}
 
 	_renderAddDialog() {
 		return (
-			<EditFixture />
+			<EditFixture
+				onSaveFixture={ this.props.saveFixture }/>
 		)
 	}
 
@@ -117,19 +152,19 @@ class Fixtures extends Component {
 						switch(route.id) {
 							case 'edit':
 								return (
-									<View style={{ marginTop: 65, backgroundColor: 'white', flex: 1 }}>
+									<View style={{ marginTop: 44, backgroundColor: 'white', flex: 1 }}>
 										{ this._renderEditDialog() }
 									</View>
 								)
 							case 'add':
 								return (
-									<View style={{ marginTop: 65, backgroundColor: 'white', flex: 1 }}>
+									<View style={{ marginTop: 44, backgroundColor: 'white', flex: 1 }}>
 										{ this._renderAddDialog() }
 									</View>
 								)
 							default:
 								return (
-									<View style={{ marginTop: 65, backgroundColor: 'white', flex: 1 }}>
+									<View style={{ marginTop: 44, backgroundColor: 'white', flex: 1 }}>
 										{ this._render() }
 									</View>
 								)
@@ -168,7 +203,8 @@ class Fixtures extends Component {
 
 const styles = StyleSheet.create({
 	page: {
-		flex: 1
+		flex: 1,
+		marginBottom: 40
 	},
 	listItem: {
 		height: 50,
@@ -177,7 +213,7 @@ const styles = StyleSheet.create({
 	},
 	listSection: {
 		height: 50,
-		backgroundColor: '#ddd',
+		backgroundColor: '#bbb',
 		justifyContent: 'center',
 		alignItems: 'center'
 	}

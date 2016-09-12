@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import {
 	Text,
@@ -11,39 +11,59 @@ import {
 	TouchableHighlight,
 	TouchableOpacity,
 	StyleSheet,
-	Modal
+	Modal,
+	RefreshControl
 } from 'react-native'
 
 import EditResult from 'futsalNative/js/components/containers/EditResult'
 import AddResult from 'futsalNative/js/components/containers/AddResult'
 import Button from 'futsalNative/js/components/presentational/micro/Button'
 
+import moment from 'moment'
+
 class Results extends Component {
+
+	static propTypes = {
+		results: PropTypes.arrayOf(PropTypes.shape({
+			teamA: PropTypes.string.isRequired,
+			teamA_Goals: PropTypes.string.isRequired,
+			teamB: PropTypes.string.isRequired,
+			teamB_Goals: PropTypes.string.isRequired,
+			kickOffAt: PropTypes.instanceOf(moment),
+		})),
+		isFetching: PropTypes.bool,
+		refreshResults: PropTypes.func,
+		saveResult: PropTypes.func
+	};
+
+	_formatDataForList(props) {
+
+		let resultsByDay = {}
+		props.results.map((result) => {
+				const { teamA, teamB, teamA_Goals, teamB_Goals, kickOffAt } = result
+				let time = result.kickOffAt.format('h:mm a')
+				let day = result.kickOffAt.format('MMMM Do YYYY')
+				resultsByDay[day] = resultsByDay[day] || []
+				resultsByDay[day].push([teamA, teamA_Goals, teamB, teamB_Goals, time])
+		})
+
+		console.log(resultsByDay)
+
+		return resultsByDay
+	}
 
 	constructor(props) {
 		super(props)
 		this._onListItemPress = this._onListItemPress.bind(this)
 		this._renderListItem = this._renderListItem.bind(this)
 		this._onAddResultPress = this._onAddResultPress.bind(this)
+		this._formatDataForList = this._formatDataForList.bind(this)
 		const ds = new ListView.DataSource({
 			rowHasChanged: (r1, r2) => r1 !== r2,
 			sectionHeaderHasChanged:  (s1, s2) => s1 !== s2
 		})
 		this.state = {
-			dataSource: ds.cloneWithRowsAndSections({
-				"1st Aug 2016": [
-					[ 'dd', 'two', 'three'],
-					[ 'rr', 'two', 'three'],
-					[ 'ff', 'two', 'three']
-				],
-				"8th Aug 2016": [
-					[ 'Derby County', 'Newcastle United', '12:00pm'],
-					[ 'ddd', 'two', 'three'],
-					[ 'ddd', 'two', 'three']
-				]
-			}),
-			teamAtext: 'team A',
-			teamBtext: 'team B'
+			dataSource: ds.cloneWithRowsAndSections(this._formatDataForList(this.props))
 		}
 	}
 
@@ -54,6 +74,10 @@ class Results extends Component {
 				<Text>{ sectionId }</Text>
 			</View>
 		)
+	}
+
+	_onRefresh() {
+		this.props.refreshResults();
 	}
 
 	_onListItemPress() {
@@ -71,14 +95,20 @@ class Results extends Component {
 	}
 
 	_renderListItem(rowData, sectionId, rowID, highlightRow) {
-		const [ teamA, teamB, kickOffAt ] = rowData
+		const [ teamA, teamA_Goals, teamB, teamB_Goals, kickOffAt ] = rowData
 		return (
 			<TouchableHighlight
 				style={ styles.listItem }
 				onPress={ this._onListItemPress }>
-				<Text>{ teamA } 0 - 0 { teamB } @ { kickOffAt }</Text>
+				<Text>{ teamA } { teamA_Goals } - { teamB_Goals } { teamB } @ { kickOffAt }</Text>
 			</TouchableHighlight>
 		)
+	}
+
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			dataSource: this.state.dataSource.cloneWithRowsAndSections(this._formatDataForList(nextProps))
+		})
 	}
 
 	_render() {
@@ -89,44 +119,51 @@ class Results extends Component {
 				<ListView
 					dataSource={ this.state.dataSource }
 					renderRow={ this._renderListItem }
-					renderSectionHeader={ this._renderSectionHeader} />
+					renderSectionHeader={ this._renderSectionHeader}
+					refreshControl={
+	          <RefreshControl
+	            refreshing={ this.props.isFetching }
+	            onRefresh={ this._onRefresh.bind(this) } /> }
+					/>
 			</View>
 		)
 	}
 
 	_renderEditDialog() {
 		return (
-			<EditResult />
+			<EditResult
+				onSaveFixture={ this.props.saveFixture }/>
 		)
 	}
 
 	_renderAddDialog() {
 		return (
-			<EditResult />
+			<EditResult
+				onSaveFixture={ this.props.saveFixture }/>
 		)
 	}
 
 	render() {
 		return (
 			<Navigator ref="navigator"
-				initialRoute={{ id: 'fixtures', title: "Results" }}
+				initialRoute={{ id: 'results', title: "Results" }}
 				renderScene={ (route, navigator) => {
 						switch(route.id) {
 							case 'edit':
 								return (
-									<View style={{ marginTop: 65, backgroundColor: 'white', flex: 1 }}>
+									<View style={{ marginTop: 44, backgroundColor: 'white', flex: 1 }}>
 										{ this._renderEditDialog() }
 									</View>
 								)
 							case 'add':
 								return (
-									<View style={{ marginTop: 65, backgroundColor: 'white', flex: 1 }}>
+									<View style={{ marginTop: 44, backgroundColor: 'white', flex: 1 }}>
 										{ this._renderAddDialog() }
 									</View>
 								)
 							default:
 								return (
-									<View style={{ marginTop: 65, backgroundColor: 'white', flex: 1 }}>
+									<View style={{ marginTop: 44, backgroundColor: 'white', flex: 1 }}>
 										{ this._render() }
 									</View>
 								)

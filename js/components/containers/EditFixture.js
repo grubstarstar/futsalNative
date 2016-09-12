@@ -9,9 +9,10 @@ function select(store, ownProps) {
 }
 
 function actions(dispatch: Dispatch, ownProps) {
-  return {
-    saveFixture: () => console.log('saveFixture called')
-  }
+  return ownProps;
+  // return {
+    // saveFixture: () => console.log('saveFixture called')
+  // }
 }
 
 export default connect(

@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 
 import {
 	View,
@@ -14,6 +14,10 @@ import {
 import Button from 'futsalNative/js/components/presentational/micro/Button'
 
 class EditFixture extends Component {
+
+	static propTypes = {
+		onSaveFixture: PropTypes.func.isRequired
+	};
 
 	constructor(props: Object) {
 		super(props)
@@ -49,7 +53,7 @@ class EditFixture extends Component {
           onDateChange={ (date) => this.setState({ kickOffAt: date }) }
         />
       <Button
-        onPress={ () => { console.log('button pressed') } }
+        onPress={ this.props.onSaveFixture }
         text="Save" />
       <Button
         onPress={ () => { console.log('button pressed') } }
