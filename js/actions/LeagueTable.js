@@ -13,7 +13,7 @@ function receivedData(data) {
 
 export function populateLeagueTable() {
   return (dispatch) => {
-    fetch('http://10.0.0.131:3000/table')
+    fetch('http://localhost:3000/table')
       .then((res) => res.json())
       .then((json) => dispatch(receivedData(json)))
       .catch((err) => {

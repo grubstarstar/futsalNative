@@ -6,15 +6,15 @@ import Fixtures from 'futsalNative/js/components/presentational/scenes/Fixtures'
 import * as navigationActions from 'futsalNative/js/actions/Navigation'
 
 function select(store, ownProps) {
-  return ownProps
+  return {...ownProps
+    // fixtures: store.fixtures.items
+  }
 }
 
 function actions(dispatch: Dispatch, ownProps) {
   return {
-    navBack: {
-      label: 'Back to menu',
-      action: () => dispatch(navigationActions.navigateBack(ownProps.navigator))
-    }
+    refreshFixtures: () => console.log('Fixtures:refreshFixtures called'),
+    saveFixture: () => console.log('Fixtures:saveFixture called')
   }
 }
 

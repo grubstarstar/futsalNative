@@ -5,7 +5,7 @@ import {
   View
 } from 'react-native'
 
-export default class AddFixtureModal extends Component {
+export default class AddResultModal extends Component {
 
   constructor(props) {
     super(props)

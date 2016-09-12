@@ -1,6 +1,4 @@
-import Splash from 'futsalNative/js/components/presentational/scenes/Splash'
-
-export function navigationStack(state = [Splash], action) {
+export function navigationStack(state = [], action) {
 	switch(action.type) {
 		case 'NAVIGATED':
 			return state.concat(action.targetComponent)

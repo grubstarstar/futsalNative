@@ -14,17 +14,17 @@ import {
 	Modal
 } from 'react-native'
 
-import EditFixture from 'futsalNative/js/components/containers/EditFixture'
-import AddFixture from 'futsalNative/js/components/containers/AddFixture'
+import EditResult from 'futsalNative/js/components/containers/EditResult'
+import AddResult from 'futsalNative/js/components/containers/AddResult'
 import Button from 'futsalNative/js/components/presentational/micro/Button'
 
-class Fixtures extends Component {
+class Results extends Component {
 
 	constructor(props) {
 		super(props)
 		this._onListItemPress = this._onListItemPress.bind(this)
 		this._renderListItem = this._renderListItem.bind(this)
-		this._onAddFixturePress = this._onAddFixturePress.bind(this)
+		this._onAddResultPress = this._onAddResultPress.bind(this)
 		const ds = new ListView.DataSource({
 			rowHasChanged: (r1, r2) => r1 !== r2,
 			sectionHeaderHasChanged:  (s1, s2) => s1 !== s2
@@ -59,14 +59,14 @@ class Fixtures extends Component {
 	_onListItemPress() {
 		this.refs.navigator.push({
 			id: 'edit',
-			title: "Edit Fixture"
+			title: "Edit Result"
 		})
 	}
 
-	_onAddFixturePress() {
+	_onAddResultPress() {
 		this.refs.navigator.push({
 			id: 'add',
-			title: "Add Fixture"
+			title: "Add Result"
 		})
 	}
 
@@ -76,7 +76,7 @@ class Fixtures extends Component {
 			<TouchableHighlight
 				style={ styles.listItem }
 				onPress={ this._onListItemPress }>
-				<Text>{ teamA } vs. { teamB } @ { kickOffAt }</Text>
+				<Text>{ teamA } 0 - 0 { teamB } @ { kickOffAt }</Text>
 			</TouchableHighlight>
 		)
 	}
@@ -85,34 +85,31 @@ class Fixtures extends Component {
 		console.log('this1', this)
 		return (
 			<View
-				style={ styles.page } >
+				style={ styles.page }>
 				<ListView
 					dataSource={ this.state.dataSource }
 					renderRow={ this._renderListItem }
 					renderSectionHeader={ this._renderSectionHeader} />
-				<Button
-					onPress={ this._onAddFixturePress }
-					text="Add Fixture" />
 			</View>
 		)
 	}
 
 	_renderEditDialog() {
 		return (
-			<EditFixture />
+			<EditResult />
 		)
 	}
 
 	_renderAddDialog() {
 		return (
-			<EditFixture />
+			<EditResult />
 		)
 	}
 
 	render() {
 		return (
 			<Navigator ref="navigator"
-				initialRoute={{ id: 'fixtures', title: "Fixtures" }}
+				initialRoute={{ id: 'fixtures', title: "Results" }}
 				renderScene={ (route, navigator) => {
 						switch(route.id) {
 							case 'edit':
@@ -183,4 +180,4 @@ const styles = StyleSheet.create({
 	}
 })
 
-export default Fixtures
+export default Results

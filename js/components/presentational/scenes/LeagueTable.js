@@ -8,13 +8,12 @@ import {
 	View,
 	ScrollView,
 	TouchableHighlight,
+	Navigator,
 	ListView,
 	InteractionManager
 } from 'react-native'
 
 import { connect } from 'react-redux'
-
-import NavigableScene from './NavigableScene'
 
 function LeagueTableRowHeader(props) {
 	return (
@@ -122,15 +121,35 @@ class LeagueTable extends Component {
 	}
 
 	render() {
-		let content = this.state.placeholderRender
-			? this.placeholderRender()
-			: this.props.table.length
-				? this.normalRender()
-				: this.emptyRender()
-
-		return <NavigableScene { ...this.props }>
-			{ content }
-		</NavigableScene>
+		return (
+			<Navigator
+				initialRoute={{ name: 'table' }}
+				renderScene={ (route, navigator) => {
+					return (
+							<View style={{ marginTop: 65 }}>
+								{ this.state.placeholderRender
+									? this.placeholderRender()
+									: this.props.table.length
+										? this.normalRender()
+										: this.emptyRender() }
+							</View>
+					)
+				}}
+				navigationBar={
+				 <Navigator.NavigationBar
+					 routeMapper={{
+						 LeftButton: (route, navigator, index, navState) =>
+							{ return (<Text></Text>); },
+						 RightButton: (route, navigator, index, navState) =>
+							 { return (<Text></Text>); },
+						 Title: (route, navigator, index, navState) =>
+							 { return (<Text>League Table</Text>); },
+					 }}
+					 style={{ backgroundColor: '#ddd' }}
+				 />
+			}
+			/>
+		)
 	}
 
 }
