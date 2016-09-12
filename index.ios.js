@@ -9,7 +9,7 @@ import {
   StyleSheet
 } from 'react-native'
 
-import App from './components/App'
+import App from 'futsalNative/js/components/App'
 
 const styles = StyleSheet.create({
 
