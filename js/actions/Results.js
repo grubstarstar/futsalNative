@@ -1,6 +1,8 @@
 export const REQUEST_RESULTS = 'REQUEST_RESULTS'
 export const RECEIVE_RESULTS = 'RECEIVE_RESULTS'
 
+import { baseUrl } from 'futsalNative/js/config'
+
 import moment from 'moment'
 
 function requestData() {
@@ -20,9 +22,10 @@ function receiveData(data) {
 }
 
 export function populateResults() {
+	let url = baseUrl + '/match'
   return (dispatch) => {
     dispatch(requestData())
-    return fetch('http://localhost:3000/match')
+    return fetch(url)
       .then((res) => res.json())
       .then((json) => dispatch(receiveData(json)))
       .catch((err) => {

@@ -1,3 +1,5 @@
+import { baseUrl } from 'futsalNative/js/config'
+
 function requestData() {
 	return {
 		type: 'REQUEST_LEAGUE_TABLE_DATA'
@@ -12,8 +14,10 @@ function receiveData(data) {
 }
 
 export function populateLeagueTable() {
+	let url = baseUrl + '/table'
+	console.log(url)
   return (dispatch) => {
-    fetch('http://localhost:3000/table')
+    fetch(url)
       .then((res) => res.json())
       .then((json) => dispatch(receiveData(json)))
       .catch((err) => {

@@ -202,7 +202,8 @@ class Results extends Component {
 
 const styles = StyleSheet.create({
 	page: {
-		flex: 1
+		flex: 1,
+		marginBottom: 40
 	},
 	listItem: {
 		height: 50,
@@ -211,7 +212,7 @@ const styles = StyleSheet.create({
 	},
 	listSection: {
 		height: 50,
-		backgroundColor: '#ddd',
+		backgroundColor: '#bbb',
 		justifyContent: 'center',
 		alignItems: 'center'
 	}
