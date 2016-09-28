@@ -26,6 +26,8 @@ import combinedReducer from 'futsalNative/js/reducers'
 
 // the initial action for loading data
 import * as LeagueTableActions from 'futsalNative/js/actions/LeagueTable'
+import * as FixturesActions from 'futsalNative/js/actions/Fixtures'
+import * as ResultsActions from 'futsalNative/js/actions/Results'
 
 let store = createStore(
   combinedReducer,
@@ -106,3 +108,5 @@ export default class extends Component {
 }
 
 store.dispatch(LeagueTableActions.populateLeagueTable())
+store.dispatch(FixturesActions.populateFixtures())
+store.dispatch(ResultsActions.populateResults())

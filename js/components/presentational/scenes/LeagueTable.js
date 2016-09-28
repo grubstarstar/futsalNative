@@ -18,12 +18,12 @@ import { connect } from 'react-redux'
 function LeagueTableRowHeader(props) {
 	return (
 		<View style={ styles.row }>
-			<View style={ styles.column }><Text>Pos</Text></View>
-			<View style={ styles.columnTeam }><Text>Team</Text></View>
-			<View style={ styles.column }><Text>P</Text></View>
-			<View style={ styles.column }><Text>Pts</Text></View>
-			<View style={ styles.column }><Text>GF</Text></View>
-			<View style={ styles.column }><Text>GA</Text></View>
+			<View style={ styles.column }><Text style={ styles.columnHeaderText }>Pos</Text></View>
+			<View style={ styles.columnTeam }><Text style={ styles.columnHeaderText }>Team</Text></View>
+			<View style={ styles.column }><Text style={ styles.columnHeaderText }>P</Text></View>
+			<View style={ styles.column }><Text style={ styles.columnHeaderText }>GF</Text></View>
+			<View style={ styles.column }><Text style={ styles.columnHeaderText }>GA</Text></View>
+			<View style={ styles.column }><Text style={ styles.columnHeaderText }>Pts</Text></View>
 		</View>
 	)
 }
@@ -45,8 +45,8 @@ class LeagueTableRow extends Component {
 					<View style={ styles.column }><Text>{ this.props.position }</Text></View>
 					<View style={ styles.columnTeam }><Text>{ this.props.name }</Text></View>
 					<View style={ styles.column }><Text>{ this.props.played }</Text></View>
-					<View style={ styles.column }><Text>{ this.props.points }</Text></View>
 					<View style={ styles.column }><Text>{ this.props.goalsFor }</Text></View>
+					<View style={ styles.column }><Text>{ this.props.points }</Text></View>
 					<View style={ styles.column }><Text>{ this.props.goalsAgainst }</Text></View>
 				</View>
 			</TouchableHighlight>
@@ -107,7 +107,9 @@ class LeagueTable extends Component {
 	}
 
 	normalRender() {
-		return <ScrollView contentContinerStyle={ styles.leagueTable }>
+		return <ScrollView
+			style={ styles.page }
+			contentContinerStyle={ styles.leagueTable }>
 			<ListView
 				enableEmptySections={ true }
 				dataSource={ this.state.dataSource }
@@ -147,7 +149,7 @@ class LeagueTable extends Component {
 					 }}
 					 style={{ backgroundColor: '#ddd' }}
 				 />
-			}
+				}
 			/>
 		)
 	}
@@ -155,32 +157,33 @@ class LeagueTable extends Component {
 }
 
 const styles = StyleSheet.create({
+	page: {
+		flex: 1,
+		marginBottom: 40
+	},
 	leagueTable: {
 		flex: 1,
 		flexDirection: 'column',
-		alignItems: 'stretch',
+		alignItems: 'stretch'
 	},
 	row: {
 		flex: 1,
 		flexDirection: 'row',
-		alignItems: 'stretch'
+		alignItems: 'stretch',
+		borderTopWidth: 1,
+		borderStyle: 'solid',
+		borderColor: '#DDDDDD'
 	},
 	column: {
 		flex: 1,
-		borderColor: '#ddd',
-		borderStyle: 'solid',
-		borderWidth: 2,
-		borderRightWidth: 0,
-		borderBottomWidth: 0,
-		padding: 10
+		padding: 12,
+		alignItems: 'center'
+	},
+	columnHeaderText: {
+		color: '#666666'
 	},
 	columnTeam: {
-		flex: 3,
-		borderColor: '#ddd',
-		borderStyle: 'solid',
-		borderWidth: 2,
-		borderRightWidth: 0,
-		borderBottomWidth: 0,
+		flex: 6,
 		padding: 10
 	}
 })

@@ -37,9 +37,8 @@ function select(store, ownProps) {
 function actions(dispatch: Dispatch, ownProps) {
   return {
     refreshFixtures: () => { dispatch(fixtures.populateFixtures()) },
-    saveFixture: (callback) => setTimeout(() => {
-      console.log('Fixtures:saveFixture called')
-    }, 1000),
+    updateFixture: () => { dispatch(fixtures.updateFixture()) },
+    createFixture: (data) => { dispatch(fixtures.createFixture(data)) }
   }
 }
 

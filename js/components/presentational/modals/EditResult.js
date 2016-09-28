@@ -27,43 +27,52 @@ class EditResult extends Component {
 
 	render() {
 		return <View>
-      <Text>Team A</Text>
-      <TextInput
-        style={ styles.textInput }
-        onChangeText={ (text) => this.setState({ teamAtext: text }) }
-        value={ this.state.teamAtext } />
-      <Text>Team B</Text>
-      <TextInput
-        style={ styles.textInput }
-        onChangeText={ (text) => this.setState({ teamBtext: text }) }
-        value={ this.state.teamBtext } />
-      <Text>Kick off @</Text>
-      <TouchableHighlight
-        onPress={ () => {} }>
-        <Text>{ JSON.stringify(this.state.kickOffAt) }</Text>
-      </TouchableHighlight>
-      <DatePickerIOS
-          date={this.state.kickOffAt}
-          mode="datetime"
-          timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60}
-          onDateChange={ (date) => this.setState({ kickOffAt: date }) }
-        />
+			<View style={ styles.page }>
+	      <View style={ styles.label }><Text>Team A</Text></View>
+	      <TextInput
+	        style={ styles.textInput }
+	        onChangeText={ (text) => this.setState({ teamAtext: text }) }
+	        value={ this.state.teamAtext } />
+	      <View style={ styles.label }><Text>Team B</Text></View>
+	      <TextInput
+	        style={ styles.textInput }
+	        onChangeText={ (text) => this.setState({ teamBtext: text }) }
+	        value={ this.state.teamBtext } />
+	      <View style={ styles.label }><Text>Kick off @</Text></View>
+	      <DatePickerIOS
+	          date={this.state.kickOffAt}
+	          mode="datetime"
+	          timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60}
+	          onDateChange={ (date) => this.setState({ kickOffAt: date }) }
+	        />
+				</View>
       <Button
         onPress={ () => { console.log('button pressed') } }
         text="Save" />
       <Button
         onPress={ () => { console.log('button pressed') } }
         text="Delete" />
-    </View>
+		</View>
 	}
 }
 
 export default EditResult
 
 const styles = StyleSheet.create({
+	page: {
+		flex: 1,
+		marginBottom: 40,
+		marginTop: 20
+	},
+  label: {
+    height: 40,
+    backgroundColor: '#bbb',
+		justifyContent: 'center',
+		alignItems: 'center'
+  },
   textInput: {
     height: 40,
-    borderColor: 'gray',
-    borderWidth: 1
+    backgroundColor: 'white',
+    justifyContent: 'center',
   }
 })

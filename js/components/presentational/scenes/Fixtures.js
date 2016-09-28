@@ -31,7 +31,8 @@ class Fixtures extends Component {
 		})),
 		isFetching: PropTypes.bool,
 		refreshFixtures: PropTypes.func,
-		saveFixture: PropTypes.func
+		updateFixture: PropTypes.func,
+		createFixture: PropTypes.func
 	};
 
 	_formatDataForList(props) {
@@ -79,10 +80,11 @@ class Fixtures extends Component {
 		this.props.refreshFixtures();
 	}
 
-	_onListItemPress() {
+	_onListItemPress(fixture) {
 		this.refs.navigator.push({
 			id: 'edit',
-			title: "Edit Fixture"
+			title: "Edit Fixture",
+			fixture: fixture
 		})
 	}
 
@@ -98,7 +100,7 @@ class Fixtures extends Component {
 		return (
 			<TouchableHighlight
 				style={ styles.listItem }
-				onPress={ this._onListItemPress }>
+				onPress={ () => this._onListItemPress(rowData) }>
 				<Text>{ teamA } vs. { teamB } @ { kickOffAt }</Text>
 			</TouchableHighlight>
 		)
@@ -130,17 +132,25 @@ class Fixtures extends Component {
 		)
 	}
 
-	_renderEditDialog() {
+	_renderEditDialog(fixture) {
+		const [ teamA, teamB, kickOffAt ] = fixture
+		console.log(fixture)
+		console.log(teamA, teamB, kickOffAt)
 		return (
 			<EditFixture
-				onSaveFixture={ this.props.saveFixture }/>
+				mode="edit"
+				teamA={ teamA }
+				teamB={ teamB }
+				kickOffAt={ kickOffAt }
+				onSaveFixture={ this.props.updateFixture }/>
 		)
 	}
 
 	_renderAddDialog() {
 		return (
 			<EditFixture
-				onSaveFixture={ this.props.saveFixture }/>
+				mode="create"
+				onSaveFixture={ this.props.createFixture }/>
 		)
 	}
 
@@ -153,7 +163,7 @@ class Fixtures extends Component {
 							case 'edit':
 								return (
 									<View style={{ marginTop: 44, backgroundColor: 'white', flex: 1 }}>
-										{ this._renderEditDialog() }
+										{ this._renderEditDialog(route.fixture) }
 									</View>
 								)
 							case 'add':
