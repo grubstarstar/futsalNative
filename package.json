@@ -7,9 +7,11 @@
   },
   "dependencies": {
     "moment": "^2.14.1",
+    "querystring": "^0.2.0",
     "react": "15.3.1",
     "react-native": "0.32.0",
     "react-native-facebook-login": "^1.4.0",
+    "react-native-fbsdk": "^0.3.0",
     "react-native-uuid": "^1.4.8",
     "react-redux": "^4.4.5",
     "redux": "^3.6.0",

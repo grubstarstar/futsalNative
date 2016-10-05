@@ -5,14 +5,9 @@
  */
 
 import {
-  AppRegistry,
-  StyleSheet
+  AppRegistry
 } from 'react-native'
 
-import App from 'futsalNative/js/components/App'
-
-const styles = StyleSheet.create({
-
-})
-
-AppRegistry.registerComponent('futsalNative', () => App);
+import App from 'futsalNative/js/App'
+console.log(App)
+AppRegistry.registerComponent('futsalNative', () => App)
