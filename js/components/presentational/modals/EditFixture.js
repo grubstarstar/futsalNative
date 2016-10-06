@@ -11,7 +11,7 @@ import {
   DatePickerIOS
 } from 'react-native'
 
-import Button from 'futsalNative/js/components/presentational/micro/Button'
+import Button from 'futsalNative/js/components/presentational/common/Button'
 
 import moment from 'moment'
 

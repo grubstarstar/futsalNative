@@ -12,19 +12,22 @@ import {
 	TouchableOpacity,
 	StyleSheet,
 	Modal,
-	RefreshControl
+	RefreshControl,
+	Image
 } from 'react-native'
 
 const FBSDK = require('react-native-fbsdk');
 const {
-  LoginButton,
   AccessToken,
-  LoginManager,
-  GraphRequest,
-  GraphRequestManager
+  LoginManager
 } = FBSDK;
 
-import Button from 'futsalNative/js/components/presentational/micro/Button'
+import RegistrationForm from 'futsalNative/js/components/containers/RegistrationForm'
+import * as Form from 'futsalNative/js/components/presentational/common/Form'
+import FacebookLoginButton from 'futsalNative/js/components/presentational/common/FacebookLoginButton'
+
+import Styles from 'futsalNative/js/common/Styles'
+import * as Colors from 'futsalNative/js/common/Colors'
 
 class LoginOrRegister extends Component {
 
@@ -43,11 +46,14 @@ class LoginOrRegister extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			email: '',
-			password: '',
-			textInputEmail: '',
-			textInputPassword: ''
+			textInputEmail: null,
+			textInputPassword: null,
+			registerFormVisible: false
 		}
+		// bind the methods
+		this.onSubmit = this.onSubmit.bind(this)
+		this.facebookLogin = this.facebookLogin.bind(this)
+		this.toggleRegisterForm = this.toggleRegisterForm.bind(this)
 	}
 
 	onSubmit() {
@@ -57,50 +63,73 @@ class LoginOrRegister extends Component {
 		)
 	}
 
+	facebookLogin() {
+		LoginManager
+			.logInWithReadPermissions(this.props.readPermissions)
+			.then((result) => result.isCancelled ? Promise.reject(Error('Login was cancelled')) : result )
+			.then(result => AccessToken.getCurrentAccessToken())
+			.catch((error) => {
+				console.log('Login failed with error: ' + error.message)
+				this.props.onFacebookLoginError(error.message)
+			})
+			.then((accessToken) => {
+				console.log('accessToken', accessToken.accessToken)
+				this.props.onFacebookLoginFinished(accessToken.accessToken)
+			})
+	}
+
+	toggleRegisterForm() {
+		console.log('toggleRegisterForm')
+		this.setState({
+			registerFormVisible: !this.state.registerFormVisible
+		})
+	}
+
 	render() {
 		return (
-			<View>
-				<Text>{ this.state.email }</Text>
-				<Text>{ this.state.name }</Text>
-				<LoginButton
-					readPermissions={ this.props.readPermissions }
-					onLoginFinished={ this.props.onFacebookLoginFinished }
-					onLogoutFinished={ this.props.onFacebookLogoutFinished } />
-				<TextInput
-					style={{height: 40, borderColor: 'gray', borderWidth: 1, marginVertical: 5}}
+			<View style={ Styles.pageCentered }>
+				<Form.Header>
+					Login or Register
+				</Form.Header>
+				<FacebookLoginButton
+					onLoggedIn={ this.facebookLogin }
+				/>
+				<Form.DividerText>
+					Or
+				</Form.DividerText>
+				<Form.InputField
 					onChangeText={(textInputEmail) => this.setState({textInputEmail})}
 					value={this.state.textInputEmail}
+					placeholder='email address'
 				/>
-				<TextInput
-					style={{height: 40, borderColor: 'gray', borderWidth: 1, marginVertical: 5}}
+				<Form.InputField
 					onChangeText={(textInputPassword) => this.setState({textInputPassword})}
 					value={this.state.textInputPassword}
+					placeholder='password'
 				/>
-				<TouchableOpacity
-					onPress={ this.onSubmit.bind(this) }>
-					<Text>Submit</Text>
-				</TouchableOpacity>
+				<Form.Button
+					onPress={ this.onSubmit }
+					text='Login'
+				/>
+				<Form.DividerText>
+					Or
+				</Form.DividerText>
+				<Form.Button
+					onPress={ this.toggleRegisterForm }
+					text='Register'
+				/>
+				<Modal
+          animationType={"slide"}
+          transparent={false}
+          visible={this.state.registerFormVisible}
+          onRequestClose={() => { console.log("Modal has been closed.") }}
+          >
+            <RegistrationForm
+							closeRegistrationForm={ this.toggleRegisterForm } />
+        </Modal>
 			</View>
 		);
 	}
 }
-
-const styles = StyleSheet.create({
-	page: {
-		flex: 1,
-		marginBottom: 40
-	},
-	listItem: {
-		height: 50,
-		justifyContent: 'center',
-		alignItems: 'center'
-	},
-	listSection: {
-		height: 50,
-		backgroundColor: '#bbb',
-		justifyContent: 'center',
-		alignItems: 'center'
-	}
-})
 
 export default LoginOrRegister

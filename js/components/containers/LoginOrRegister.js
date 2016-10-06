@@ -6,14 +6,6 @@ import LoginOrRegister from 'futsalNative/js/components/presentational/scenes/Lo
 
 import * as LoginActions from 'futsalNative/js/actions/Login'
 
-const FBSDK = require('react-native-fbsdk');
-const {
-  AccessToken,
-  LoginManager,
-  GraphRequest,
-  GraphRequestManager
-} = FBSDK;
-
 function select(store, ownProps) {
   return {
   	...ownProps,
@@ -29,26 +21,15 @@ function actions(dispatch: Dispatch, ownProps) {
       dispatch(LoginActions.loginUsingCredentials(email, password))
     },
 
-  	onFacebookLoginFinished: (error, result) => {
-  		console.log('onLoginFinished')
-  		if (error) {
-  			console.log("login has error: " + error.message);
-  		} else if (result.isCancelled) {
-  			console.log("login is cancelled.");
-  		} else {
-        console.log('result', result)
-  			AccessToken.getCurrentAccessToken()
-  				.then((data) => {
-  					console.log('currentAccessToken', data.accessToken)
-  					dispatch(LoginActions.loginUsingFacebook(data.accessToken))
-  				})
-  		}
+  	onFacebookLoginFinished: (accessToken) => {
+      console.log('onFacebookLoginFinished - accessToken', accessToken)
+  	   dispatch(LoginActions.loginUsingFacebook(accessToken))
   	},
 
-  	onFacebookLogoutFinished: () => {
-  		// dispatch(LoginActions.logoutUsingFacebook(accessToken))
-  	}
-
+    onFacebookLoginError: (error) => {
+      alert('onFacebookLoginError', error)
+    }
+    
   }
 }
 

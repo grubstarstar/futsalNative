@@ -25,6 +25,10 @@ class LoggedInApp extends Component {
     this.state = {
       selectedTab: 'login'
     }
+    // initial actions to carry out. Prepopulate some stuff.
+    // props.store.dispatch(LeagueTableActions.populateLeagueTable())
+    // props.store.dispatch(FixturesActions.populateFixtures())
+    // props.store.dispatch(ResultsActions.populateResults())
   }
 
   render() {
@@ -87,7 +91,4 @@ class LoggedInApp extends Component {
 
 }
 
-// initial actions to carry out. Prepopulate some stuff.
-// store.dispatch(LeagueTableActions.populateLeagueTable())
-// store.dispatch(FixturesActions.populateFixtures())
-// store.dispatch(ResultsActions.populateResults())
+export default LoggedInApp

@@ -17,7 +17,7 @@ import {
 
 import EditResult from 'futsalNative/js/components/containers/EditResult'
 import AddResult from 'futsalNative/js/components/containers/AddResult'
-import Button from 'futsalNative/js/components/presentational/micro/Button'
+import Button from 'futsalNative/js/components/presentational/common/Button'
 
 import moment from 'moment'
 

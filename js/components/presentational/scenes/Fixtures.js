@@ -17,7 +17,7 @@ import {
 
 import EditFixture from 'futsalNative/js/components/containers/EditFixture'
 import AddFixture from 'futsalNative/js/components/containers/AddFixture'
-import Button from 'futsalNative/js/components/presentational/micro/Button'
+import Button from 'futsalNative/js/components/presentational/common/Button'
 
 import moment from 'moment'
 
