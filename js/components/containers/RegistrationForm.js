@@ -1,83 +1,28 @@
-import React, { Component } from 'react'
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity
-} from 'react-native'
+// @flux
 
-import * as Form from 'futsalNative/js/components/presentational/common/Form'
+import { connect } from 'react-redux'
 
-import Styles from 'futsalNative/js/common/Styles'
-import * as Colors from 'futsalNative/js/common/Colors'
+import RegistrationForm from 'futsalNative/js/components/presentational/modals/RegistrationForm'
 
-class RegistrationForm extends Component {
+import * as RegistrationActions from 'futsalNative/js/actions/Registration'
 
-  constructor(props) {
-    super(props)
-    this.state = {
-			textInputEmail: null,
-			textInputPassword: null,
-			textInputConfirmPassword: null
-		}
+function select(state, ownProps) {
+  return {
+      ...ownProps
   }
-
-  render() {
-    return (
-      <View style={ Styles.pageCentered }>
-				<Form.Header>
-					Register a new user profile
-				</Form.Header>
-				<Form.InputField
-					onChangeText={(textInputEmail) => this.setState({textInputEmail})}
-					value={this.state.textInputEmail}
-					placeholder='email address'
-				/>
-				<Form.InputField
-					onChangeText={(textInputPassword) => this.setState({textInputPassword})}
-					value={this.state.textInputPassword}
-					placeholder='password'
-				/>
-        <Form.InputField
-          onChangeText={(textInputConfirmPassword) => this.setState({textInputConfirmPassword})}
-          value={this.state.textInputConfirmPassword}
-          placeholder='confirm password'
-        />
-        <Form.Button
-					onPress={ () => alert('yet to implement') }
-					text='Create Profile'
-				/>
-				<Form.Button
-					onPress={ this.props.closeRegistrationForm }
-					text='Close'
-				/>
-			</View>
-    )
-  }
-
 }
 
-export default RegistrationForm
+function actions(dispatch, ownProps) {
+  return {
+      ...ownProps,
 
-const styles = StyleSheet.create({
-	page: {
-		flex: 1,
-		paddingHorizontal: 30,
-		paddingVertical: 50,
-		alignItems: 'stretch',
-		justifyContent: 'center'
-	},
-	textInputWrapper: {
-		borderColor: Colors.LIGHT_GRAY,
-		borderWidth: 1,
-		marginVertical: 5,
-		borderRadius: 2,
-	},
-	textInput: {
-		backgroundColor: Colors.ALMOST_WHITE,
-		height: 40,
-		paddingHorizontal: 10,
-		borderRadius: 2,
-	}
-})
+      registerUser: (details) => {
+        dispatch(RegistrationActions.registerUser(details))
+      }
+  }
+}
+
+export default connect(
+  select,
+  actions
+)(RegistrationForm)

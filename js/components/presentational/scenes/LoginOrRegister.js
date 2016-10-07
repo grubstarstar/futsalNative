@@ -89,7 +89,7 @@ class LoginOrRegister extends Component {
 		return (
 			<View style={ Styles.pageCentered }>
 				<Form.Header>
-					Login or Register
+					Jumpers for Goalposts
 				</Form.Header>
 				<FacebookLoginButton
 					onLoggedIn={ this.facebookLogin }
