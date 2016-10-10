@@ -19,7 +19,7 @@ export function registerUser(details) {
       if(json.error) {
         throw Error(json.error)
       }
-      alert(`an activation email has been sent to %s`, details.email)
+      alert(`an activation email has been sent to ${details.email}`)
     })
     .catch((err) => {
       alert(err.message)
