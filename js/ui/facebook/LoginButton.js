@@ -1,13 +1,14 @@
 import React from 'react'
 
-import * as Colors from 'futsalNative/js/common/Colors'
-
 import {
   Image,
   Text,
   TouchableOpacity,
   StyleSheet
 } from 'react-native'
+
+export const FB_WHITE = '#FFFFFF'
+export const FB_BLUE = '#3B5998'
 
 export default ({ onLoggedIn }) => {
   return(
@@ -16,7 +17,7 @@ export default ({ onLoggedIn }) => {
       onPress={ onLoggedIn }>
       <Image
         style={{ height: 25, width: 25, marginRight: 50 }}
-        source={ require('futsalNative/images/facebook.png') } />
+        source={ require('images/facebook.png') } />
       <Text style={ styles.buttonText }>Continue with Facebook</Text>
     </TouchableOpacity>
   )
@@ -24,10 +25,10 @@ export default ({ onLoggedIn }) => {
 
 const styles = StyleSheet.create({
 	buttonText: {
-		color: Colors.WHITE,
+		color: FB_WHITE
 	},
 	facebookLoginButton: {
-		backgroundColor: Colors.FB_BLUE,
+		backgroundColor: FB_BLUE,
 		flexDirection: 'row',
 		height: 40,
 		padding: 8,

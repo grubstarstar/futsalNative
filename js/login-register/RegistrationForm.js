@@ -10,7 +10,6 @@ import {
 import * as Form from 'futsalNative/js/components/presentational/common/Form'
 
 import Styles from 'futsalNative/js/common/Styles'
-import * as Colors from 'futsalNative/js/common/Colors'
 
 class RegistrationForm extends Component {
 
@@ -68,25 +67,3 @@ class RegistrationForm extends Component {
 }
 
 export default RegistrationForm
-
-const styles = StyleSheet.create({
-	page: {
-		flex: 1,
-		paddingHorizontal: 30,
-		paddingVertical: 50,
-		alignItems: 'stretch',
-		justifyContent: 'center'
-	},
-	textInputWrapper: {
-		borderColor: Colors.LIGHT_GRAY,
-		borderWidth: 1,
-		marginVertical: 5,
-		borderRadius: 2,
-	},
-	textInput: {
-		backgroundColor: Colors.ALMOST_WHITE,
-		height: 40,
-		paddingHorizontal: 10,
-		borderRadius: 2,
-	}
-})
