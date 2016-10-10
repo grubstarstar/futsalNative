@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
 import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity
+  View
 } from 'react-native'
 
-import * as Form from 'futsalNative/js/components/presentational/common/Form'
+import { connect } from 'react-redux'
+
+import * as Form from 'futsalNative/js/ui/Form'
+
+import * as RegistrationActions from 'futsalNative/js/actions/Registration'
 
 import Styles from 'futsalNative/js/common/Styles'
+
+/* Presentation */
 
 class RegistrationForm extends Component {
 
@@ -66,4 +68,32 @@ class RegistrationForm extends Component {
 
 }
 
-export default RegistrationForm
+/* Container */
+
+function select(state, ownProps) {
+  return {
+      ...ownProps
+  }
+}
+
+function actions(dispatch, ownProps) {
+  return {
+      ...ownProps,
+
+      registerUser: (details) => {
+        dispatch(RegistrationActions.registerUser(details))
+      }
+  }
+}
+
+/* exports */
+
+export RegistrationForm
+
+export const CreateContainer = (PresentationComponent) => connect(
+  select,
+  actions
+)(PresentationComponent)
+
+export default CreateContainer(RegistrationForm)
+

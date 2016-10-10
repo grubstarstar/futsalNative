@@ -12,23 +12,24 @@ import * as FixturesActions from 'futsalNative/js/actions/Fixtures'
 import * as ResultsActions from 'futsalNative/js/actions/Results'
 
 // import the scenes
-import LeagueTable from 'futsalNative/js/components/containers/LeagueTable'
-import Fixtures from 'futsalNative/js/components/containers/Fixtures'
-import Results from 'futsalNative/js/components/containers/Results'
-import Teams from 'futsalNative/js/components/containers/Teams'
-import Leagues from 'futsalNative/js/components/containers/Leagues'
+import LeagueTable from 'futsalNative/js/league-table'
+import Fixtures from 'futsalNative/js/fixtures'
+import Results from 'futsalNative/js/results'
+import Teams from 'futsalNative/js/teams'
+import Divisions from 'futsalNative/js/divisions'
 
-class LoggedInApp extends Component {
+/* Presentation */
+
+class MainPlayer extends Component {
 
   constructor(props) {
+    
     super(props)
     this.state = {
       selectedTab: 'login'
     }
-    // initial actions to carry out. Prepopulate some stuff.
-    // props.store.dispatch(LeagueTableActions.populateLeagueTable())
-    // props.store.dispatch(FixturesActions.populateFixtures())
-    // props.store.dispatch(ResultsActions.populateResults())
+
+    this.props.onLoad()
   }
 
   render() {
@@ -36,7 +37,7 @@ class LoggedInApp extends Component {
       <TabBarIOS>
         <TabBarIOS.Item
           title="League Table"
-          icon={ require("futsalNative/icons/png2/news.png") }
+          icon={ require("images/news.png") }
           badge={ 4 }
           selected={ this.state.selectedTab === 'table' }
           onPress={ () => {
@@ -47,7 +48,7 @@ class LoggedInApp extends Component {
         </TabBarIOS.Item>
         <TabBarIOS.Item
           title="Fixtures"
-          icon={ require("futsalNative/icons/png2/football2.png") }
+          icon={ require("images/football2.png") }
           selected={ this.state.selectedTab === 'fixtures' }
           onPress={ () => {
             this.setState({ selectedTab: 'fixtures' })
@@ -56,7 +57,7 @@ class LoggedInApp extends Component {
         </TabBarIOS.Item>
         <TabBarIOS.Item
           title="Results"
-          icon={ require("futsalNative/icons/png2/line_chart.png") }
+          icon={ require("images/line_chart.png") }
           selected={ this.state.selectedTab === 'results' }
           onPress={ () => {
             this.setState({ selectedTab: 'results' })
@@ -65,7 +66,7 @@ class LoggedInApp extends Component {
         </TabBarIOS.Item>
         <TabBarIOS.Item
           title="Teams"
-          icon={ require("futsalNative/icons/png2/update.png") }
+          icon={ require("images/update.png") }
           selected={ this.state.selectedTab === 'teams' }
           onPress={ () => {
             this.setState({ selectedTab: 'teams' })
@@ -73,13 +74,13 @@ class LoggedInApp extends Component {
           { this._renderContent(Teams) }
         </TabBarIOS.Item>
         <TabBarIOS.Item
-          title="Leagues"
-          icon={ require("futsalNative/icons/png2/football.png") }
-          selected={ this.state.selectedTab === 'leagues' }
+          title="Divisions"
+          icon={ require("images/football.png") }
+          selected={ this.state.selectedTab === 'divisions' }
           onPress={ () => {
-            this.setState({ selectedTab: 'leagues' })
+            this.setState({ selectedTab: 'divisions' })
           }} >
-          { this._renderContent(Leagues) }
+          { this._renderContent(Divisions) }
         </TabBarIOS.Item>
       </TabBarIOS>
     )
@@ -91,4 +92,30 @@ class LoggedInApp extends Component {
 
 }
 
-export default LoggedInApp
+/* Container */
+
+function select(state, ownProps) {
+  return {
+      ...ownProps,
+  }
+}
+
+function actions(dispatch, ownProps) {
+  return {
+      ...ownProps,
+
+      onLoad: () => {
+        dispatch(LeagueTableActions.populateLeagueTable())
+        dispatch(FixturesActions.populateFixtures())
+        dispatch(ResultsActions.populateResults())
+      }
+
+  }
+}
+
+/* exports */
+
+export default connect(
+  select,
+  actions
+)(MainPlayer)

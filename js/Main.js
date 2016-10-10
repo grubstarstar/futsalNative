@@ -4,13 +4,12 @@ import React, { Component } from 'react'
 // react native stuff
 import {
   View,
-  Text,
   Modal
 } from 'react-native'
 
 // import the initial scenes
-import LoginOrRegister from 'futsalNative/js/components/containers/LoginOrRegister'
-import LoggedInApp from 'futsalNative/js/components/containers/LoggedInApp'
+import LoginRegister from 'futsalNative/js/login-register'
+import MainPlayer from 'futsalNative/js/main-player'
 
 // the react-redux stuff
 import { connect } from 'react-redux'
@@ -24,14 +23,14 @@ class Main extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <LoggedInApp />
+        <MainPlayer />
         <Modal
           animationType={"fade"}
           transparent={false}
           visible={!this.props.userIsLoggedIn}
           onRequestClose={() => { console.log("Modal has been closed.") }}
           >
-            <LoginOrRegister />
+            <LoginRegister />
         </Modal>
       </View>
     )
@@ -39,7 +38,8 @@ class Main extends Component {
 
 }
 
-// defined the container components select and action functions
+/* Container */
+
 function select(state, ownProps) {
   return {
     ...ownProps,
@@ -52,6 +52,8 @@ function actions(dispatch, ownProps) {
     ...ownProps
   }
 }
+
+/* exports */
 
 export default connect(
   select,
